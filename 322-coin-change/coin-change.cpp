@@ -2,37 +2,21 @@ class Solution {
 public:
     int coinChange(vector<int>& coins, int a) {
 
-        vector<int> dp(a+1, -1);
+        vector<int> dp(a+1, INT_MAX);
 
-        int ans = solve(coins, a, dp); 
+        dp[0] = 0;
 
-        return ans == INT_MAX ? -1 : ans;
-    }
+        for(int bal = 0; bal<=a; bal++)
+        {
 
-    int solve(vector<int> coins, int bal, vector<int> &dp)
-    {
-        if(bal==0) 
-            return 0; 
-        
-        if(bal < 0)
-            return INT_MAX;
-
-
-        if(dp[bal]!=-1)
-            return dp[bal];
-        
-        int mini = INT_MAX;
-
-        for(int i: coins)
-        {   
-            int res = solve(coins, bal-i, dp);
-
-            if(res!= INT_MAX)
-                res += 1;
-            mini = min(mini, res); 
+            for(int coin : coins)
+            {   
+                if(bal-coin >= 0 and dp[bal-coin] != INT_MAX)
+                    dp[bal] = min(dp[bal], 1+dp[bal-coin]);
+                
+            }
         }
 
-        dp[bal] = mini;
-        return dp[bal];
+        return dp[a] == INT_MAX ? -1: dp[a];
     }
 };
