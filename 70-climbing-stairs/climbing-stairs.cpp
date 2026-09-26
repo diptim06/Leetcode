@@ -3,9 +3,16 @@ public:
     int climbStairs(int n) {
 
         vector<int> dp(n+1, -1);
+        dp[n] = 1;
 
-        int ans = solve(n, 1, dp) + solve(n, 2, dp);
-        return ans;
+        for(int i = n-1; i>=0; i--)
+        {
+            if(i == n-1)
+                dp[i] = dp[i+1];
+            else
+                dp[i] = dp[i+1] + dp[i+2];
+        }
+        return dp[0];
     }
 
     int solve( int &n, int i, vector<int> &dp)
