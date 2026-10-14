@@ -1,21 +1,18 @@
 class Solution {
 public:
     int rob(vector<int>& nums) {
+        int prevrob = 0; 
+        int maxrob = 0;
 
-        vector<int> dp(nums.size()+2, 0);
 
-
-        for(int i = nums.size()-1; i>=0; i--)
+        for(int i = 0; i<nums.size(); i++)
         {
-            int case1 = dp[i+2] + nums[i];
-
-            int case2 = dp[i+1];
-            
-
-            dp[i] = max(case1, case2);
+            int temp = max(prevrob+nums[i], maxrob);
+            prevrob = maxrob;
+            maxrob = temp;
         }
 
-        return dp[0];
+        return maxrob;
     }
 
     int solve( vector<int>& nums, int i, vector<int> &dp){
