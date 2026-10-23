@@ -6,47 +6,35 @@ public:
 
     int numRollsToTarget(int n, int f, int target)
     {
-        vector<vector<vector<int>>> dp(n+1 , vector<vector<int>>(f+1 , vector<int>(target+1 , -1)));
-
-        // for(int i = 0 ; i<=n i++)
-        // {
-        //     for(int j = f ; j>=0 ; j++)
-        //     {
-        //         for(int k = 0 ; k<=taget ;k++)
-        //         {
+        vector<vector<vector<int>>> dp(n+1 , vector<vector<int>>(f+2 , vector<int>(target+1 , 0)));
 
 
-        //         }
-        //     }
-        // }
+        for(int i = 1; i<=f; i++)
+        {
+            dp[0][i][0] = 1;
+        }
 
-        return solve(n , f , target , 1 , dp);
+        for(int i = 1 ; i<=n; i++)
+        {
+            for(int j = f ; j>=1 ; j--)
+            {
+                for(int k = 1; k<=target ;k++)
+                {
+
+                    int incl = 0;
+                    
+                    if(k>=j)
+                        incl = (dp[i-1][1][k-j]) % modulo;
+
+                    int excl = (dp[i][j+1][k]) % modulo;
+
+                    dp[i][j][k] = ((incl+excl)% modulo);
+                }
+            }
+        }
+
+        return dp[n][1][target];
         
     }
-
-
-    int solve(int n , int f ,  int target , int currFace ,vector<vector<vector<int>>> &dp)
-    {
-        if(n==0 and target==0)
-            return 1;
-
-        if(n<0 or currFace > f or target<0)
-            return 0;
-
-            if(dp[n][currFace][target] != -1)
-                return dp[n][currFace][target] ;
-
-
-        int incl = (solve(n-1 , f , (target-currFace),(1) , dp)) % modulo;
-
-            
-
-        int excl = (solve(n , f , target , currFace + 1 , dp))% modulo;
-
-        return dp[n][currFace][target] = ((incl+excl)% modulo);
-
-        
-    }
-
 
 };
