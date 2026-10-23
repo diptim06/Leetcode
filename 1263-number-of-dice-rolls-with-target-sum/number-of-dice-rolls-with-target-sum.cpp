@@ -6,34 +6,32 @@ public:
 
     int numRollsToTarget(int n, int f, int target)
     {
-        vector<vector<vector<int>>> dp(n+1 , vector<vector<int>>(f+2 , vector<int>(target+1 , 0)));
+        vector<vector<int>> dp(n+1 , vector<int>(target+1 , 0));
 
 
-        for(int i = 1; i<=f; i++)
-        {
-            dp[0][i][0] = 1;
-        }
+            dp[0][0] = 1;
+        
 
         for(int i = 1 ; i<=n; i++)
         {
-            for(int j = f ; j>=1 ; j--)
-            {
+            
                 for(int k = 1; k<=target ;k++)
                 {
+                    int ways = 0;
+                    for(int faces = 1; faces <= f; faces++)
+                    {
+                        if(k>=faces)
+                            ways = (ways + dp[i-1][k-faces]) % modulo;
 
-                    int incl = 0;
-                    
-                    if(k>=j)
-                        incl = (dp[i-1][1][k-j]) % modulo;
-
-                    int excl = (dp[i][j+1][k]) % modulo;
-
-                    dp[i][j][k] = ((incl+excl)% modulo);
+                        else
+                            break;
+                    }
+                    dp[i][k] = ways;
                 }
-            }
+            
         }
 
-        return dp[n][1][target];
+        return dp[n][target];
         
     }
 
