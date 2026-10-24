@@ -8,46 +8,44 @@ public:
             sum+= rods[i];
         }
 
-        vector<vector<int>> dp(rods.size()+1, vector<int>(sum+1, -1));
-        int ans = solve(rods, 0, 0, 0, dp);
-        return ans > 0 ? ans : 0;
+        vector<vector<int>> dp(rods.size(), vector<int>(sum+1, -1));
+
+        // dp[rods.size()][0] = 
+        // for(int i = rods.size()-1; i>=0; i--)
+        // {
+        //     for(int j = sum; j>=0; j--)
+        //     {
+        //         dp[]
+        //     }
+        // }
+
+        int ans = solve(rods, 0, 0, dp);
+        return max(ans,0);
     }
 
-    int solve(vector<int> &rods, int I, int II, int index, vector<vector<int>> &dp)
+    int solve(vector<int> &rods, int diff, int index, vector<vector<int>> &dp)
     {
         if(index >= rods.size())
         {
-            if(I == II)
-            {
-                return I;
-            }
-            return -1e7;
+            return (diff==0) ? 0 : -1e7;
+            
         }
-        int diff = abs(I-II);
 
         if(dp[index][diff]!= -1)
         {
-            if(dp[index][diff] == -1e7)
-                return -1e7;
-            else
-                return dp[index][diff] + min(I,II);
+            return dp[index][diff];
                 
         }
 
-        
-        int case1 = solve(rods, I+ rods[index], II, index+1, dp);
-        int case2 = solve(rods, I, II + rods[index], index+1, dp);
-        int case3 = solve(rods, I, II, index+1, dp);
+        int res = solve(rods,diff, index+1, dp);
+        res = max(res, solve(rods, diff+rods[index], index+1, dp));
 
-        int best = max({case1 , case2, case3});
-
-        if(best >= 0)
-            dp[index][diff] = best - min(I,II);
-
+        if(diff>=rods[index])
+            res = max(res, rods[index]  + solve(rods, diff - rods[index], index+1, dp));
         else
-            dp[index][diff] = -1e7;
-
-        return best;
+            res = max(res, diff+ solve(rods, rods[index] - diff, index+1, dp));
+        
+        return dp[index][diff] = res;
 
     }
 };
