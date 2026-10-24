@@ -1,28 +1,25 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices, int fee) {
-        vector<vector<int>> dp(prices.size(), vector<int>(2, -1));
-        return solve(prices, 0, true, dp, fee);
-    }
-
-    int solve(vector<int> &prices, int index, bool buy, vector<vector<int>> &dp, int fee)
-    {
-        if(index == prices.size())
+        vector<vector<int>> dp(prices.size()+1, vector<int>(2, 0));
+        
+        for(int i = prices.size() -1; i>=0; i--)
         {
-            return 0;
+            for(int j = 0; j<=1; j++)
+            {
+                int profit = 0;
+
+                if(j)
+                    profit = max((-(prices[i]) + dp[i+1][j-1]) , (0 + dp[i+1][j]));
+                else
+                    profit = max((prices[i] - fee + dp[i+1][j+1]), (0 + dp[i+1][j]));
+
+                dp[i][j] = profit;
+            }
         }
 
-        if(dp[index][buy] != -1)
-            return dp[index][buy];
-
-        
-        int profit = 0;
-
-        if(buy)
-            profit = max((-(prices[index]) + solve(prices, index+1, false, dp , fee)) , (0 + solve(prices, index+1, true, dp, fee)));
-        else
-            profit = max((prices[index] - fee + solve(prices, index+1, true, dp, fee)), (0+solve(prices, index+1, false, dp, fee)));
-
-        return dp[index][buy] = profit;
+        return dp[0][1];
     }
+
+    
 };
