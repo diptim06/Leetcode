@@ -6,10 +6,24 @@ public:
         for(auto i : nums)
             sum+=i;
         
-        vector<vector<int>> dp(nums.size()+1,(vector<int>(sum+1, -1)));
+        vector<vector<int>> dp(nums.size()+2,(vector<int>(sum+1, 0)));
 
+       
+            dp[nums.size()][0] = 1;
+    
+        for(int i = nums.size()-1; i>=0; i--)
+        {
+            for(int diff= sum; diff>=0; diff--)
+            {
+                bool c1 = (diff + nums[i] <= sum) ? dp[i+1][diff+nums[i]] : false;
         
-        return solve(nums, 0, 0, dp);
+                bool c2 = dp[i+1][abs(diff-nums[i])];
+
+                dp[i][diff] = c1 or c2;
+            }
+        }
+        
+        return dp[0][0];
     }
 
     bool solve(vector<int> &nums, int i, int diff, vector<vector<int>> &dp)
