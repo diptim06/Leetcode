@@ -1,7 +1,7 @@
 class Solution {
 public:
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
-        unordered_map<int, vector<int>> adjlist(graph.size());
+        
 
         vector<vector<int>> ans;
         vector<int> temp;
