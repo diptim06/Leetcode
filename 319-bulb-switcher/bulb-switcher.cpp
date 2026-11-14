@@ -1,6 +1,10 @@
 class Solution {
 public:
     int bulbSwitch(int n) {
-        return sqrt(n);
+        int count = 0;
+        for (long long i = 1; i * i <= n; i++) {
+            count++;
+        }
+        return count;
     }
 };
